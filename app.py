@@ -51,10 +51,30 @@ def callback():
  
 #訊息傳遞區塊
 ##### 基本上程式編輯都在這個function #####
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    message = TextSendMessage(text=event.message.text)
-    line_bot_api.reply_message(event.reply_token,message)
+ @handler.add(MessageEvent, message=TextMessage)
+ def handle_message(event):
+     message = text=event.message.text
+     if re.match('告訴我秘密',message):
+         confirm_template_message = TemplateSendMessage(
+             alt_text='問問題',
+             template=ConfirmTemplate(
+                 text='你喜這堂課嗎？',
+                 actions=[
+                     PostbackAction(
+                         label='喜歡',
+                         display_text='超喜歡',
+                         data='action=其實不喜歡'
+                     ),
+                     MessageAction(
+                         label='愛',
+                         text='愛愛'
+                     )
+                 ]
+             )
+         )
+         line_bot_api.reply_message(event.reply_token, confirm_template_message)
+     else:
+         line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
 
 #主程式
 import os
