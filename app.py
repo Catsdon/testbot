@@ -52,10 +52,15 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = text=event.message.text
-    if re.match('告訴我秘密',message):
-        line_bot_api.reply_message(event.reply_token,TextSendMessage('才不告訴你哩！'))
+    if re.match('你誰',message):
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('我誰~~~！'))
+    elif re.match('Hi',message):
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('哈囉肥宅'))
+    elif re.match('摸',message):
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('東踏取蜜!'))
+    
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage('哈哈，你沒猜中關鍵字'))
 #主程式
 import os
 if __name__ == "__main__":
