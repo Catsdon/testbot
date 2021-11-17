@@ -85,20 +85,20 @@ def handle_message(event):
     elif re.match('你好帥',message):
         line_bot_api.reply_message(event.reply_token,TextSendMessage('你現在才知道哦 '))
     elif re.match('我帥嗎',message):
-        line_bot_api.reply_message(event.reply_token,TextSendMessage('滿帥的，只不過差我一點' '))
-        
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('滿帥的，只不過差我一點')) 
     elif re.match('好餓',message):
         line_bot_api.reply_message(event.reply_token,TextSendMessage('我也很餓'))
     elif re.match('餓',message):
         line_bot_api.reply_message(event.reply_token,TextSendMessage('我也很餓'))
     elif re.match('早安',message):
-        line_bot_api.reply_message(event.reply_token,TextSendMessage('早安！今天真是美好的一天' '))
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('早安！今天真是美好的一天'))
     elif re.match('早',message):
-        line_bot_api.reply_message(event.reply_token,TextSendMessage('早安！今天真是美好的一天' '))
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('早安！今天真是美好的一天'))
     elif re.match('想睡了',message):
-        line_bot_api.reply_message(event.reply_token,TextSendMessage('晚安，祝你有個好夢~!' '))
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('晚安，祝你有個好夢~!'))
     elif re.match('晚安',message):
-        line_bot_api.reply_message(event.reply_token,TextSendMessage('晚安，祝你有個好夢~!' '))
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('晚安，祝你有個好夢~!'))
+
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage('哈哈，你沒猜中關鍵字'))
 #主程式
