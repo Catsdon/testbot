@@ -5,9 +5,9 @@
  版權屬於「行銷搬進大程式」所有，若有疑問，可聯絡ivanyang0606@gmail.com
  Line Bot聊天機器人
  第四章 選單功能
- 快速回復QuickReply
+ 選擇按鈕ConfirmTemplate
  """
- # 載入LineBot所需要的套件
+#  載入LineBot所需要的套件
  from flask import Flask, request, abort
  from linebot import (
      LineBotApi, WebhookHandler
@@ -18,13 +18,13 @@
  from linebot.models import *
  import re
  app = Flask(name)
- ## 必須放上自己的Channel Access Token
+# 必須放上自己的Channel Access Token
 line_bot_api = LineBotApi('6LtqwU4k493Gys589ikza9GzxWgrHjJFIcDGc21+JcMAALUjLd2xLzGRJft575QbIOeaUEedDr6QMf4mormSu0bCA8QuUTGj0kC0Im1qNsovhsMLv8tHwJjE2PkLvA44E8ckPuLRtWlTu3sNq+rNmwdB04t89/1O/w1cDnyilFU=')
 # 必須放上自己的Channel Secret
 handler = WebhookHandler('62fedcb34c8415668774fd2ccdb5d73c')
 
 line_bot_api.push_message('U738f70cb25916b736d9abe88f11d01f2', TextSendMessage(text='你可以開始了'))
- # 監聽所有來自 /callback 的 Post Request
+#  監聽所有來自 /callback 的 Post Request
  @app.route("/callback", methods=['POST'])
  def callback():
      # get X-Line-Signature header value
@@ -36,19 +36,24 @@ line_bot_api.push_message('U738f70cb25916b736d9abe88f11d01f2', TextSendMessage(t
  def handle_message(event):
      message = text=event.message.text
      if re.match('告訴我秘密',message):
-         flex_message = TextSendMessage(text='以下有雷，請小心',
-                                quick_reply=QuickReply(items=[
-                                    QuickReplyButton(action=MessageAction(label="按我", text="按！")),
-                                    QuickReplyButton(action=MessageAction(label="按我", text="按！")),
-                                    QuickReplyButton(action=MessageAction(label="按我", text="按！")),
-                                    QuickReplyButton(action=MessageAction(label="別按我", text="你按屁喔！爆炸了拉！！")),
-                                    QuickReplyButton(action=MessageAction(label="按我", text="按！")),
-                                    QuickReplyButton(action=MessageAction(label="按我", text="按！")),
-                                    QuickReplyButton(action=MessageAction(label="按我", text="按！")),
-                                    QuickReplyButton(action=MessageAction(label="按我", text="按！")),
-                                    QuickReplyButton(action=MessageAction(label="按我", text="按！"))
-                                ]))
-         line_bot_api.reply_message(event.reply_token, flex_message)
+         confirm_template_message = TemplateSendMessage(
+             alt_text='問問題',
+             template=ConfirmTemplate(
+                 text='你喜這堂課嗎？',
+                 actions=[
+                     PostbackAction(
+                         label='喜歡',
+                         display_text='超喜歡',
+                         data='action=其實不喜歡'
+                     ),
+                     MessageAction(
+                         label='愛',
+                         text='愛愛'
+                     )
+                 ]
+             )
+         )
+         line_bot_api.reply_message(event.reply_token, confirm_template_message)
      else:
          line_bot_api.reply_message(event.reply_token, TextSendMessage(message))
  # 主程式
