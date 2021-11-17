@@ -52,15 +52,25 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     message = text=event.message.text
-    if re.match('你誰',message):
+    if re.match('看評論',message):
+         flex_message = TextSendMessage(text='以下有雷，請小心',
+                                quick_reply=QuickReply(items=[
+                                    QuickReplyButton(action=MessageAction(label="PTT", text="https://www.ptt.cc/bbs/movie/index.html")),
+                                    QuickReplyButton(action=MessageAction(label="DCARD", text="https://www.dcard.tw/f/movie")),
+                                    
+                                ]))
+         line_bot_api.reply_message(event.reply_token, flex_message)
+
+          
+    elif re.match('你誰',message):
         line_bot_api.reply_message(event.reply_token,TextSendMessage('我誰~~~！'))
     elif re.match('你是誰',message):
         line_bot_api.reply_message(event.reply_token,TextSendMessage('我誰~~~！當然是你的電影大幫手'))
         
     elif re.match('Hi',message):
-        line_bot_api.reply_message(event.reply_token,TextSendMessage('哈囉肥宅'))
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('安安'))
     elif re.match('hi',message):
-        line_bot_api.reply_message(event.reply_token,TextSendMessage('哈囉肥宅'))
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('尼好 肥宅'))
         
     elif re.match('哈囉',message):
         line_bot_api.reply_message(event.reply_token,TextSendMessage('哈囉肥宅'))
@@ -84,6 +94,9 @@ def handle_message(event):
         line_bot_api.reply_message(event.reply_token,TextSendMessage('我也愛你 '))
     elif re.match('你好帥',message):
         line_bot_api.reply_message(event.reply_token,TextSendMessage('你現在才知道哦 '))
+    elif re.match('我好帥',message):
+        line_bot_api.reply_message(event.reply_token,TextSendMessage('你說付錢的時候嗎?真的滿帥的 '))
+        
     elif re.match('我帥嗎',message):
         line_bot_api.reply_message(event.reply_token,TextSendMessage('滿帥的，只不過差我一點')) 
     elif re.match('好餓',message):
