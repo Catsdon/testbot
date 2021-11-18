@@ -14,8 +14,15 @@ from linebot.models import (
     MessageEvent,QuickReplyButton,QuickReply,VideoMessage,TextMessage, StickerMessage, StickerSendMessage, ConfirmTemplate, TemplateSendMessage, MessageAction, URIAction, LocationMessage
  )
 
-line_bot_api = LineBotApi('6LtqwU4k493Gys589ikza9GzxWgrHjJFIcDGc21+JcMAALUjLd2xLzGRJft575QbIOeaUEedDr6QMf4mormSu0bCA8QuUTGj0kC0Im1qNsovhsMLv8tHwJjE2PkLvA44E8ckPuLRtWlTu3sNq+rNmwdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('62fedcb34c8415668774fd2ccdb5d73c')
+yc_token='6LtqwU4k493Gys589ikza9GzxWgrHjJFIcDGc21+JcMAALUjLd2xLzGRJft575QbIOeaUEedDr6QMf4mormSu0bCA8QuUTGj0kC0Im1qNsovhsMLv8tHwJjE2PkLvA44E8ckPuLRtWlTu3sNq+rNmwdB04t89/1O/w1cDnyilFU='
+yu_secret='62fedcb34c8415668774fd2ccdb5d73c'
+
+sy_token='2IT+lGbqil5lJCuY8ijAtLswcNi3sShNWPLoBOxNzo3iwm5Ob+8JyNsymS9WQCsKYp7YEhtTAIC2+C2Dm2sMvztIsDoKAaYXDUKxfh6OkpqmObF0eK2+ebunvj4IWw/OiS0eac9a6eJXp1c+y7b3wAdB04t89/1O/w1cDnyilFU='
+sy_secret='d91f9849821716b3500eb7686daf3f8b'
+
+
+line_bot_api = LineBotApi(yc_token)
+handler = WebhookHandler(yc_secret)
 
 @app.route("/callback", methods=['POST'])
 
@@ -36,6 +43,9 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     mtext = event.message.text
+    userid = event.source.user_id
+    profile = line_bot_api.get_profile(str(userid))
+    username=profile.display_name
     if mtext == '@圖片地圖':
         sendImgmap(event)
 
@@ -50,35 +60,44 @@ def handle_message(event):
 
     elif mtext =='@彩蛋':
         line_bot_api.reply_message(event.reply_token,TextSendMessage('我誰~~~！'))
+    elif mtext == '@id':
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(userid))
+
+    elif mtext == '@name':
+        try:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage(username))
+        except LineBotApiError as e:
+            line_bot_api.reply_message(event.reply_token, TextSendMessage('no name'))
 
 
 
 
 
-
+#儲存影片
 @handler.add(MessageEvent,message=(VideoMessage))
 def handle_content_message(event):
+    userid = event.source.user_id
+    profile = line_bot_api.get_profile(str(userid))
+    username = profile.display_name
     static_tmp_path='./resources'
-    if isinstance(event.message,VideoMessage):
-        ext='mp4'
-    else:
-        return
+    # if isinstance(event.message,VideoMessage):
+    #     ext='mp4'
+    # else:
+    #     return
 
     message_content=line_bot_api.get_message_content(event.message.id)
-    with tempfile.NamedTemporaryFile(dir=static_tmp_path,prefix=ext+'-',delete=False) as tf:
+    with tempfile.NamedTemporaryFile(dir=static_tmp_path,prefix=username+'___',delete=False) as tf:
         for chunk in message_content.iter_content():
-            print(chunk)
             tf.write(chunk)
         tempfile_path=tf.name
 
-    dist_path=tempfile_path+'.'+ext
+    dist_path=tempfile_path+'.mp4'
     dist_name=os.path.basename(dist_path)
     os.rename(tempfile_path,dist_path)
 
     line_bot_api.reply_message(
         event.reply_token,[
-            TextSendMessage(text='成功搜集人臉特徵'),
-            TextSendMessage(text=request.host_url+os.path.join('static','tmp',dist_name))
+            TextSendMessage(text='成功搜集人臉特徵')
         ]
 
 
@@ -219,5 +238,8 @@ def sendData_sell(event, backdata):  #Postback,顯示日期時間
 
 import os
 if __name__ == "__main__":
+    #sy_version
+    #app.run()
+
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port)
