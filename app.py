@@ -119,7 +119,7 @@ def handle_message(event):
 
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage('哈哈，你沒猜中關鍵字'))
-
+#123
 
 @handler.add(MessageEvent,message=(VideoMessage))
 def handle_content_message(event):
