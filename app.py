@@ -15,7 +15,7 @@ from linebot.models import (
  )
 
 yc_token='6LtqwU4k493Gys589ikza9GzxWgrHjJFIcDGc21+JcMAALUjLd2xLzGRJft575QbIOeaUEedDr6QMf4mormSu0bCA8QuUTGj0kC0Im1qNsovhsMLv8tHwJjE2PkLvA44E8ckPuLRtWlTu3sNq+rNmwdB04t89/1O/w1cDnyilFU='
-yu_secret='62fedcb34c8415668774fd2ccdb5d73c'
+yc_secret='62fedcb34c8415668774fd2ccdb5d73c'
 
 sy_token='2IT+lGbqil5lJCuY8ijAtLswcNi3sShNWPLoBOxNzo3iwm5Ob+8JyNsymS9WQCsKYp7YEhtTAIC2+C2Dm2sMvztIsDoKAaYXDUKxfh6OkpqmObF0eK2+ebunvj4IWw/OiS0eac9a6eJXp1c+y7b3wAdB04t89/1O/w1cDnyilFU='
 sy_secret='d91f9849821716b3500eb7686daf3f8b'
