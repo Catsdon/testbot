@@ -20,6 +20,9 @@ from linebot.exceptions import (
 )
 from linebot.models import *
 import re
+from linebot.models import (
+    MessageEvent,VideoMessage,TextMessage, StickerMessage, StickerSendMessage, ConfirmTemplate, TemplateSendMessage, MessageAction, URIAction, LocationMessage
+ )
 app = Flask(__name__)
 
 # 必須放上自己的Channel Access Token
@@ -61,7 +64,9 @@ def handle_message(event):
                                 ]))
          line_bot_api.reply_message(event.reply_token, flex_message)
 
-          
+
+    elif mtext == '上傳人臉特徵':
+        user_camera_open(event)
     elif re.match('你誰',message):
         line_bot_api.reply_message(event.reply_token,TextSendMessage('我誰~~~！'))
     elif re.match('你是誰',message):
@@ -114,6 +119,39 @@ def handle_message(event):
 
     else:
         line_bot_api.reply_message(event.reply_token, TextSendMessage('哈哈，你沒猜中關鍵字'))
+
+
+@handler.add(MessageEvent,message=(VideoMessage))
+def handle_content_message(event):
+    static_tmp_path='./resources'
+    if isinstance(event.message,VideoMessage):
+        ext='mp4'
+    else:
+        return
+
+    message_content=line_bot_api.get_message_content(event.message.id)
+    with tempfile.NamedTemporaryFile(dir=static_tmp_path,prefix=ext+'-',delete=False) as tf:
+        for chunk in message_content.iter_content():
+            print(chunk)
+            tf.write(chunk)
+        tempfile_path=tf.name
+
+    dist_path=tempfile_path+'.'+ext
+    dist_name=os.path.basename(dist_path)
+    os.rename(tempfile_path,dist_path)
+
+    line_bot_api.reply_message(
+        event.reply_token,[
+            TextSendMessage(text='成功搜集人臉特徵'),
+            TextSendMessage(text=request.host_url+os.path.join('static','tmp',dist_name))
+        ]
+
+
+    )
+
+
+
+
 #主程式
 import os
 if __name__ == "__main__":
