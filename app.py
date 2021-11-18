@@ -65,7 +65,7 @@ def handle_message(event):
          line_bot_api.reply_message(event.reply_token, flex_message)
 
 
-    elif mtext == '上傳人臉特徵':
+    elif message == 'test':
         user_camera_open(event)
     elif re.match('你誰',message):
         line_bot_api.reply_message(event.reply_token,TextSendMessage('我誰~~~！'))
@@ -123,7 +123,7 @@ def handle_message(event):
 
 @handler.add(MessageEvent,message=(VideoMessage))
 def handle_content_message(event):
-    static_tmp_path='./resources'
+    static_tmp_path=''
     if isinstance(event.message,VideoMessage):
         ext='mp4'
     else:
